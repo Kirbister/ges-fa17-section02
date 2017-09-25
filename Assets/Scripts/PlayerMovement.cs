@@ -4,9 +4,27 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
-	// Use this for initialization
-	void Start ()
+    private Rigidbody2D myRigidBody2D;
+
+    [SerializeField]
+    private float speed = 7.7f;
+
+    [SerializeField]
+    private float jumpHeight = 6;
+
+    private bool isOnGround;
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
+        isOnGround = true;
+    }
+
+    // Use this for initialization
+    void Start ()
+    {
+        myRigidBody2D = GetComponent<Rigidbody2D>();
+
+
         //Debug.Log("Greetings. Code called from Start.");
 
         //teleport
@@ -53,15 +71,24 @@ public class PlayerMovement : MonoBehaviour {
 
         Debug.Log("horizontal input: " + horizontalInput);
 
-        float speed = 0.2f;
+        
 
-        transform.Translate(speed * horizontalInput, 0, 0);
+        myRigidBody2D.velocity = new Vector2(speed * horizontalInput, myRigidBody2D.velocity.y);
 
-        if (Input.GetButtonDown("Jump"))
+        //transform.Translate(speed * horizontalInput, 0, 0);
+
+
+
+        if (Input.GetButtonDown("Jump") & isOnGround)
         {
-            transform.Translate(0, 6, 0);
+            myRigidBody2D.velocity = new Vector2(myRigidBody2D.velocity.x, jumpHeight);
+
+            isOnGround = false;
+
+            //transform.Translate(0, 6, 0);
         }
     }
 
+    
 
 }
